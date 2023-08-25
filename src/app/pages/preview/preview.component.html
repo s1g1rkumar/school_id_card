@@ -1,0 +1,77 @@
+<div class="">
+  <h2 class="mb-4">Preview Form Data</h2>
+  <div class="grid nested-grid">
+    <div class=" col-12 md:col-8">
+      <div class="grid">
+        <div class="col-12 flex  gap-2">
+          <label>Name</label>
+          <p class="text-1xl font-bold">{{data.name}}</p>
+        </div>
+        <div class="col-12 flex  gap-2">
+          <label>Roll number</label>
+          <p class="text-1xl font-bold">{{data.roll_number}}</p>
+        </div>
+        <div class="col-12 flex  gap-2">
+          <label>Admission Number</label>
+          <p class="text-1xl font-bold">{{ data.admission_number}}</p>
+        </div>
+        <div class="col-12 flex  gap-2">
+          <label>Mobile number</label>
+          <p class="text-1xl font-bold">{{data.mobile_number}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 md:col-4">
+      <img [src]="getPictureUrl(data.picture)" alt="not found" class="w-10rem h-12rem">
+    </div>
+    <div class="col-12 md:col-6">
+      <label>Class</label>
+      <p class="text-1xl font-bold">{{data.class}}</p>
+    </div>
+    <div class="col-12 md:col-6">
+      <label>Roll number</label>
+      <p class="text-1xl font-bold">{{data.roll_number}}</p>
+    </div>
+    <div class="col-12 md:col-6">
+      <label>Roll number</label>
+      <p class="text-1xl font-bold">{{data.roll_number}}</p>
+    </div>
+    <div class="col-12 md:col-6">
+      <label>Date of birth</label>
+      <p class="text-1xl font-bold">{{data.dob | date}}</p>
+    </div>
+    <div class="col-12 md:col-6">
+      <label>Father's name</label>
+      <p class="text-1xl font-bold">{{data.father_name}}</p>
+    </div>
+    <div class="col-12 md:col-6">
+      <label>Mother's name</label>
+      <p class="text-1xl font-bold">{{data.mother_name}}</p>
+    </div>
+    <div class="col-12 md:col-6">
+      <label>House name</label>
+      <p class="text-1xl font-bold">{{data.house_name}}</p>
+    </div>
+    <div class="col-12 md:col-6">
+      <label>Address</label>
+      <p class="text-1xl font-bold">{{data.address}}</p>
+    </div>
+    <div class="col-12 md:col-6">
+      <label>Blood group</label>
+      <p class="text-1xl font-bold">{{data.blood_group}}</p>
+    </div>
+    <div class="col-12 md:col-6">
+      <label>Transportation</label>
+      <p class="text-1xl font-bold">{{data.transportation}}</p>
+    </div>
+
+
+    <div class="col-12 md:col-6">
+      <p-button label="Edit" (click)="onClickEditModeHandler()" >
+      </p-button>
+      <p-button label="Submit" type="submit">
+      </p-button>
+    </div>
+  </div>
+
+</div>
