@@ -1,0 +1,787 @@
+<div class="flex align-items-center justify-content-center"
+  style="min-height: 100vh; padding-bottom: 50px; padding-top: 50px">
+  <div style="max-width: 900px">
+    <div class="w-full">
+      <!-- <p-divider></p-divider> -->
+      <h2 class="flex align-items-center justify-content-center pb-3" style="color: #317874">
+        School Regisration Application Form
+      </h2>
+    </div>
+    <br />
+    <div class="flex align-items-center justify-content-center gap-4">
+      <!-- <div class="form-container border-1 border-primary border-round col-12 p-5 surface-card"> -->
+
+
+      <form [formGroup]="myForm" (submit)="formSubmit()">
+        <div formArrayName="sections">
+          <div *ngFor="
+                let section of myForm.get('sections').controls;
+                let s = index
+              " class="form-container border-1 border-primary border-round col-12 p-5 surface-card my-3">
+            <div [formGroupName]="s" class="grid gap-1 mb-1 px-2">
+              <input type="text" pInputText formControlName="section_name" placeholder="section title"
+                class="col-5 border-none text-3xl" />
+              <input type="text" pInputText formControlName="section_desc" placeholder="Section description"
+                class="col-5 border-none text-2xl" />
+              <span class="pi pi-plus " style="color: blue" (click)="addItem(s)"></span>
+              <p-divider class="w-full"></p-divider>
+              <div formArrayName="items" class="w-full">
+                <div *ngFor="
+                      let item of myForm.get(['sections', s, 'items']).controls;
+                      let i = index
+                    " class="w-full">
+                  <div [formGroupName]="i" class=" p-1 my-2 w-full">
+                    <div class="border border-1 border-round border-400 p-2 mt-2 grid">
+                      <div class="col-5">
+                        <input type="text" pInputText placeholder="label name" formControlName="field_name"
+                        class="w-full" />
+                      </div>
+                      <div class="col-3 ">
+                        <p-dropdown formControlName="field_type" [options]="fieldTypeList" optionLabel="label"
+                        styleClass="w-full"></p-dropdown>
+                      </div>
+                      <div class="col-1">
+                        <p-inputSwitch formControlName="field_required" styleClass="w-full"></p-inputSwitch>
+                      </div>
+                      
+                      <div class="col-3 text-right">
+                        <span class="pi pi-times-circle " style="color: red" (click)="removeItem(s,i)"></span>
+                      </div>
+                      <input type="text" pInputText formControlName="field_description" placeholder="label description"
+                        class="col-12" />
+                      <div class="dependent-fields my-2"
+                        *ngIf=" this.myForm.get('sections').get([s]).get('items').get([i]).get('field_type').value.value === 'dropdown' || this.myForm.get('sections').get([s]).get('items').get([i]).get('field_type').value.value === 'checkbox' ">
+                        <div formArrayName="field_options">
+                          <div *ngFor="
+                         let item of myForm.get(['sections', s, 'items',i,'field_options']).controls;
+                         let fo = index">
+                            <div [formGroupName]="fo" class=" my-2">
+                              <input type="text" pInputText placeholder="option label" formControlName="label"
+                                class="col-5" />
+                              <input type="text" pInputText placeholder="option value" formControlName="value"
+                                class="col-5" />
+
+                              <span class="pi pi-plus " style="color: blue" (click)="addOptions(s,i,fo)"></span>
+                              <span class="pi pi-times-circle " style="color: red"
+                                (click)="removeOptions(s,i,fo)"></span>
+
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <button type="submit">submit</button>
+        </div>
+      </form>
+      <!-- </div> -->
+      <div class="flex-row gap-1">
+        <p-button icon="pi pi-plus" styleClass="p-button-rounded p-button-text p-button-raised border shadow-4"
+          (click)="addSection()"></p-button>
+        <p-button icon="pi pi-trash" styleClass="p-button-rounded p-button-text p-button-raised border shadow-4 mt-2"
+          (click)="removeSection()"></p-button>
+      </div>
+
+    </div>
+
+    <div>
+      <form [formGroup]="schoolForm" class="formgrid grid" (submit)="schoolFormSubmit()">
+        <div class="field col-12 p-4 border-round surface-card shadow-1 grid mt-8 border-primary border-1"
+          name="step-1">
+          <div class="col-12">
+            <div class="-mt-8 mb-4 text-center relative">
+              <div class="absolute" style="bottom: 0; right: 42%">
+                <p-button icon="pi pi-camera" styleClass="p-button-sm p-button-rounded "
+                  (click)="hiddenfileinput.click()"></p-button>
+              </div>
+              <div *ngIf="pictureUrl; else elseBlock">
+                <img [src]="pictureUrl" alt="profile_pic" class="w-10rem h-10rem border-circle"
+                  style="border: 8px solid #eff3f8" />
+              </div>
+              <ng-template #elseBlock>
+                <img src="https://www.adaptivewfs.com/wp-content/uploads/2020/07/logo-placeholder-image.png"
+                  alt="profile_pic" class="w-10rem h-10rem border-circle" style="border: 8px solid #eff3f8" />
+              </ng-template>
+            </div>
+            <!-- <button (click)="hiddenfileinput.click()">Image</button> -->
+          </div>
+          <div class="col-12 md:col-6">
+            <label class="title_color">School Code*</label>
+            <input type="text" pInputText formControlName="school_code" class="w-full" />
+          </div>
+          <div class="col-12 md:col-6">
+            <label class="title_color">School Name*</label>
+            <input type="text" pInputText formControlName="school_name" class="w-full" />
+          </div>
+          <div class="col-12 md:col-6">
+            <label class="title_color">Board*</label>
+            <input type="text" pInputText formControlName="board" class="w-full" />
+          </div>
+          <div class="col-12 md:col-6">
+            <label class="title_color">Branch*</label>
+            <input type="text" pInputText formControlName="branch" class="w-full" />
+          </div>
+
+          <div class="col-12 md:col-6 mt-3">
+            <label class="title_color">Phone*</label>
+            <p-inputMask mask="9999999999" placeholder="999-999-9999" formControlName="phone"
+              styleClass="w-full"></p-inputMask>
+          </div>
+          <div class="col-12 md:col-6 mt-3">
+            <label class="title_color">Website*</label>
+            <input type="text" pInputText formControlName="website" class="w-full" />
+          </div>
+
+          <div class="col-12 md:col-6 mt-3">
+            <label class="title_color">Pincode*</label>
+            <p-inputMask mask="999999" placeholder="999-999" formControlName="pincode"
+              styleClass="w-full"></p-inputMask>
+          </div>
+
+          <div class="col-12 md:col-6 mt-3">
+            <label class="title_color">Email*</label>
+            <input type="text" pInputText formControlName="email" class="w-full" />
+          </div>
+          <div class="col-12 md:col-12 mt-3">
+            <label class="title_color">Address*</label>
+            <textarea rows="5" cols="30" pInputTextarea formControlName="address"
+              class="w-full border border-solid border-400 border-round"></textarea>
+          </div>
+        </div>
+
+        <div class="field col-12 p-4 border-round surface-card shadow-1 grid mt-5 border-primary border-1"
+          name="step-2">
+          <div class="align-items-center justify-content-center col-12">
+            <h4 class="title_color">select fields for student form</h4>
+            <p-divider></p-divider>
+          </div>
+          <div formGroupName="field" class="col-12 grid mt-2 flex">
+            <div class="col-12">
+              <p-tabView>
+                <p-tabPanel header="Basic Details">
+                  <div class="col-12" formGroupName="basic_details">
+                    <p-table [value]="products">
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th>Field Name</th>
+                          <th>Enable/Disable</th>
+                          <th>Mandatory</th>
+                          <th>Order Number</th>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-product>
+                        <tr formGroupName="name">
+                          <td><label class="title_color">Name</label></td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="admission_no">
+                          <td>
+                            <label class="title_color">Admission No.</label>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="class">
+                          <td><label class="title_color">Class</label></td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="section">
+                          <td><label class="title_color">Section</label></td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="roll_no">
+                          <td><label class="title_color">Roll No.</label></td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="admission_date">
+                          <td>
+                            <label class="title_color">Date of Admission</label>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="dob">
+                          <td>
+                            <label class="title_color">Date of Birth</label>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="gender">
+                          <td><label class="title_color">Gender</label></td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="category">
+                          <td><label class="title_color">Category</label></td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="religion">
+                          <td><label class="title_color">Religion</label></td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="picture">
+                          <td>
+                            <label class="title_color">Profile Picture</label>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                      </ng-template>
+                    </p-table>
+                  </div>
+                </p-tabPanel>
+                <p-tabPanel header="Parent Details">
+                  <div class="col-12" formGroupName="parent_details">
+                    <p-table [value]="products">
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th>Field Name</th>
+                          <th>Enable/Disable</th>
+                          <th>Mandatory</th>
+                          <th>Order Number</th>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-product>
+                        <tr formGroupName="father_name">
+                          <td>
+                            <label class="title_color">Father Name</label>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="father_occupation">
+                          <td>
+                            <label class="title_color">Father Occupation</label>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="mother_name">
+                          <td>
+                            <label class="title_color">Mother Name</label>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="mother_occupation">
+                          <td>
+                            <label class="title_color">Mother Occupation</label>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="father_annual_income">
+                          <td>
+                            <label class="title_color">Father Annual Income</label>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="mother_annual_income">
+                          <td>
+                            <label class="title_color">Mother Annual Income</label>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                      </ng-template>
+                    </p-table>
+                  </div>
+                </p-tabPanel>
+                <p-tabPanel header="Communication Details">
+                  <div class="col-12" formGroupName="communication_details">
+                    <p-table [value]="products">
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th>Field Name</th>
+                          <th>Enable/Disable</th>
+                          <th>Mandatory</th>
+                          <th>Order Number</th>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-product>
+                        <tr formGroupName="mobile_no">
+                          <td><label class="title_color">Mobile No.</label></td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="whatsapp_no">
+                          <td>
+                            <label class="title_color">Whatsapp No.</label>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="mail_id">
+                          <td><label class="title_color">Mail Id</label></td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="transportation">
+                          <td>
+                            <label class="title_color">Transportation</label>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="address">
+                          <td><label class="title_color">Address</label></td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                      </ng-template>
+                    </p-table>
+                  </div>
+                </p-tabPanel>
+                <p-tabPanel header="Other Details">
+                  <div class="col-12" formGroupName="other_details">
+                    <p-table [value]="products">
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th>Field Name</th>
+                          <th>Enable/Disable</th>
+                          <th>Mandatory</th>
+                          <th>Order Number</th>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-product>
+                        <tr formGroupName="aadhar_no">
+                          <td><label class="title_color">Aadhar No.</label></td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="blood_group">
+                          <td>
+                            <label class="title_color">Blood Group</label>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="faculty">
+                          <td><label class="title_color">faculty</label></td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="admitted_in">
+                          <td>
+                            <label class="title_color">Admitted In</label>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="house_name">
+                          <td><label class="title_color">House Name</label></td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="school_code">
+                          <td>
+                            <label class="title_color">School Code</label>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                        <tr formGroupName="school_name">
+                          <td>
+                            <label class="title_color">School Code</label>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="active" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputSwitch formControlName="mandatory" class="sm"></p-inputSwitch>
+                          </td>
+                          <td>
+                            <p-inputNumber formControlName="order" inputId="minmax" mode="decimal" [min]="1" [max]="15">
+                            </p-inputNumber>
+                          </td>
+                        </tr>
+                      </ng-template>
+                    </p-table>
+                  </div>
+                </p-tabPanel>
+              </p-tabView>
+            </div>
+
+            <br />
+            <!-- <div class="col-6 flex align-items-center justify-content-evenly">
+            <label class="title_color">Name</label>
+            <p-inputSwitch formControlName="name" class="sm"></p-inputSwitch>
+            <p-inputSwitch formControlName="name_mandatory" class="sm"></p-inputSwitch>
+          </div> -->
+            <!-- <div class="col-6 flex align-items-center justify-content-evenly">
+            <label class="title_color">Admission_no</label>
+            <p-inputSwitch formControlName="admission_no"></p-inputSwitch>
+            <p-inputSwitch formControlName="admission_no_mandatory"></p-inputSwitch>
+          </div> -->
+            <!-- <div class="col-6 flex align-items-center justify-content-evenly">
+            <label class="title_color">class</label>
+            <p-inputSwitch formControlName="class"></p-inputSwitch>
+            <p-inputSwitch formControlName="class_mandatory"></p-inputSwitch>
+          </div> -->
+            <!-- <div class="col-6 flex align-items-center justify-content-evenly">
+            <label class="title_color">Faculty</label>
+            <p-inputSwitch formControlName="faculty"></p-inputSwitch>
+            <p-inputSwitch formControlName="faculty_mandatory"></p-inputSwitch>
+
+          </div> -->
+            <!-- <div class="col-6 flex align-items-center justify-content-evenly">
+            <label class="title_color">Picture</label>
+            <p-inputSwitch formControlName="picture"></p-inputSwitch>
+            <p-inputSwitch formControlName="picture_mandatory"></p-inputSwitch>
+          </div> -->
+            <!-- <div class="col-6 flex align-items-center justify-content-evenly">
+            <label class="title_color">Roll_no</label>
+            <p-inputSwitch formControlName="roll_no"></p-inputSwitch>
+            <p-inputSwitch formControlName="roll_no_mandatory"></p-inputSwitch>
+          </div> -->
+            <!-- <div class="col-6 flex align-items-center justify-content-evenly">
+            <label class="title_color">House Name</label>
+            <p-inputSwitch formControlName="house_name"></p-inputSwitch>
+            <p-inputSwitch formControlName="house_name_mandatory"></p-inputSwitch>
+          </div> -->
+            <!-- <div class="col-6 flex align-items-center justify-content-evenly">
+                <label >Name</label>
+                <p-inputSwitch formControlName="name"></p-inputSwitch>
+              </div> -->
+            <!-- <div class="col-6 flex align-items-center justify-content-evenly">
+            <label class="title_color">DOB</label>
+            <p-inputSwitch formControlName="dob"></p-inputSwitch>
+            <p-inputSwitch formControlName="dob_mandatory"></p-inputSwitch>
+          </div> -->
+            <!-- <div class="col-6 flex align-items-center justify-content-evenly">
+            <label class="title_color">Father Name</label>
+            <p-inputSwitch formControlName="father_name"></p-inputSwitch>
+            <p-inputSwitch formControlName="father_name_mandatory"></p-inputSwitch>
+          </div> -->
+            <!-- <div class="col-6 flex align-items-center justify-content-evenly">
+            <label class="title_color">Mother Name</label>
+            <p-inputSwitch formControlName="mother_name"></p-inputSwitch>
+            <p-inputSwitch formControlName="mother_name_mandatory"></p-inputSwitch>
+          </div> -->
+            <!-- <div class="col-6 flex align-items-center justify-content-evenly">
+            <label class="title_color">BloodGroup</label>
+            <p-inputSwitch formControlName="blood_group"></p-inputSwitch>
+            <p-inputSwitch formControlName="blood_group_mandatory"></p-inputSwitch>
+          </div> -->
+            <!-- <div class="col-6 flex align-items-center justify-content-evenly">
+            <label class="title_color">Mobile_no</label>
+            <p-inputSwitch formControlName="mobile_no"></p-inputSwitch>
+            <p-inputSwitch formControlName="mobile_no_mandatory"></p-inputSwitch>
+          </div> -->
+            <!-- <div class="col-6 flex align-items-center justify-content-evenly">
+            <label class="title_color">Transportation</label>
+            <p-inputSwitch formControlName="transportation"></p-inputSwitch>
+            <p-inputSwitch formControlName="transportation_mandatory"></p-inputSwitch>
+          </div> -->
+            <!-- <div class="col-6 flex align-items-center justify-content-evenly">
+            <label class="title_color">Address</label>
+            <p-inputSwitch formControlName="address"></p-inputSwitch>
+            <p-inputSwitch formControlName="address_mandatory"></p-inputSwitch>
+          </div> -->
+            <!-- <div class="col-6 flex align-items-center justify-content-evenly">
+            <label class="title_color">School code</label>
+            <p-inputSwitch formControlName="school_code"></p-inputSwitch>
+            <p-inputSwitch formControlName="school_code_mandatory"></p-inputSwitch>
+          </div> -->
+            <!-- <div class="col-6 flex align-items-center justify-content-evenly">
+            <label class="title_color">School Name</label>
+            <p-inputSwitch formControlName="school_name"></p-inputSwitch>
+            <p-inputSwitch formControlName="school_name_mandatory"></p-inputSwitch>
+          </div> -->
+          </div>
+        </div>
+
+        <div class="field col-12 p-4 border-round surface-card shadow-1 grid mt-5 border-primary border-1"
+          name="step-3">
+          <div class="align-items-center justify-content-center col-12">
+            <h4 class="title_color">form theme configuration</h4>
+            <p-divider></p-divider>
+          </div>
+          <div formGroupName="theme" class="col-12 grid mt-2">
+            <div class="md:col-6 sm:col-12">
+              <label class="title_color">Primary Font</label>
+              <input type="text" pInputText formControlName="primary_font"
+                class="w-full text-base text-color surface-overlay" />
+            </div>
+            <div class="md:col-6 sm:col-12">
+              <label class="title_color">Secondary Font</label>
+              <input type="text" pInputText formControlName="secondary_font"
+                class="w-full text-base text-color surface-overlay" />
+            </div>
+            <div class="col-6 flex align-items-center justify-content-evenly">
+              <label class="title_color">Primary Color</label>
+              <p-colorPicker formControlName="primary_color"></p-colorPicker>
+            </div>
+            <div class="col-6 flex align-items-center justify-content-evenly">
+              <label class="title_color">Secondary Color</label>
+              <p-colorPicker formControlName="secondary_color"></p-colorPicker>
+            </div>
+
+            <div class="col-6 flex align-items-center justify-content-evenly">
+              <label class="title_color">Theme Color</label>
+              <p-colorPicker formControlName="theme_color"></p-colorPicker>
+            </div>
+          </div>
+        </div>
+
+        <div class="field col-12 p-4 border-round surface-card shadow-1 grid hidden">
+          <div class="col-12 md:col-6">
+            <label class="title_color">Upload profile picture*</label>
+            <input type="file" style="display: none" (change)="fileUpload($event)" required accept="image/*"
+              data-max-size="2048" #hiddenfileinput
+              class="file_upload text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
+            <!-- <span class="text-red-500" *ngIf="transportation && transportation.invalid && transportation.touched">Transportation cannot be empty.</span> -->
+          </div>
+        </div>
+
+        <div class="col-12 flex align-items-center justify-content-center mt-4">
+          <p-button label="Submit" type="Submit"></p-button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- <div *ngIf="isPreview">
+        <app-preview [data]="data" (dataEvent)="editModeHandler()" (submitClearData)="submitClearData()" ></app-preview>
+      </div> -->
+</div>
+<!-- </div> -->

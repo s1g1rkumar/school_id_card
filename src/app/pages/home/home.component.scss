@@ -1,0 +1,17 @@
+.title_color{
+    color: #09539D;
+}
+
+.custom-container .w-full {
+    width: 100% !important;
+  }
+
+
+  :host::ng-deep .f-width input {
+    width: 100% !important;
+  }
+
+  :host ::ng-deep .f-width-inputnumber {
+    background:red;
+    width: 100%;
+  }

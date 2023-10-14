@@ -1,106 +1,306 @@
-<div class="flex align-items-center justify-content-center " style="min-height: 100vh;">
-  <div class="surface-card shadow-2 border-round p-4" style="max-width: 1144px;">
-    <div *ngIf="!isPreview">
-      <h3>Fill all details</h3>
+<div class="flex align-items-center justify-content-center" style="min-height: 100vh;">
+  <div class="" style="max-width: 900px;">
+    <div *ngIf="!isPreview" class="w-full ">
+      <div class="mt-4 border-round surface-card shadow-1 -ml-3 mb-5">
+        <div class=" px-4 pt-4" *ngIf="schoolDetails">
+          <div class="flex align-items-center justify-content-center gap-4">
+            <div class="">
+              <div><img src="{{ schoolDetails.logo }}" alt="school_logo" height="100" width="100"></div>
+            </div>
+            <div class="flex flex-column gap-1 align-items-center">
+             <h1 style="color: #09539D;">{{schoolDetails.school_name}}</h1>
+              <h4 style="color: #09539D;">{{schoolDetails.address}}</h4>
+              <h5 style="color: #09539D;">{{schoolDetails.pincode}},{{schoolDetails.phone}}</h5>
+            </div>
+          </div>  
+        </div>
+        <p-divider></p-divider>
+        <h4 class="flex align-items-center justify-content-center pb-3" style="color: #317874;">Student Application Form</h4>
+      </div>
+
+
+
+
       <br>
       <div>
-        <form [formGroup]="addForm" class="formgrid grid" (submit)="addFormSubmit()">
-          <div class="field col-12 md:col-6">
-            <label>Name</label>
-            <input type="text"
-              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
-              formControlName="name">
+        <form [formGroup]="addForm" class="formgrid grid" (submit)="addFormSubmit()">     
+          <div class="field col-12 p-4 border-round surface-card shadow-1 grid mt-5" formGroupName="basic_details">
+            <div class="col-12">
+              <div class="-mt-8 mb-4 text-center relative" *ngIf="schoolDetails.field.basic_details.picture">
+                <div class="absolute" style="bottom: 0;right: 42%;">
+                  <p-button icon="pi pi-camera" styleClass="p-button-sm p-button-rounded "  (click)="hiddenfileinput.click()" ></p-button>
+                </div>
+                <div *ngIf="pictureUrl;else elseBlock">  
+                  <img [src]="pictureUrl" alt="profile_pic" class="w-10rem h-10rem border-circle " style="border: 8px solid #eff3f8;">
+                </div>
+                <ng-template #elseBlock>  
+                  <img src="https://www.nicepng.com/png/detail/128-1280406_view-user-icon-png-user-circle-icon-png.png" alt="profile_pic" class="w-10rem h-10rem border-circle " style="border: 8px solid #eff3f8;">
+                </ng-template>
+              </div>
+            </div>
+            <div class="col-12 md:col-6 hidden" >
+              <label class="title_color">Upload profile picture*</label>
+              <input type="file" style="display: none" (change)="fileUpload($event)" required accept="image/*" data-max-size="2048" #hiddenfileinput
+                class="file_upload text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+            </div>
+           
+            <div class="col-12 md:col-6" *ngIf="schoolDetails.field.basic_details.name.active">
+              <label class="title_color">Name*</label>
+                <input type="text" pInputText formControlName="name" class="w-full"/>
+            </div>
+            <div class="col-12 md:col-6 custom-container" *ngIf="schoolDetails.field.basic_details.admission_no.active">
+              <label class="title_color" >Admission Number*</label>
+              <!-- <input type="text" pInputText formControlName="admission_no" class="w-full"/> -->
+              <p-inputNumber  mode="decimal" formControlName="admission_no" class="w-full" inputId="withoutgrouping" [useGrouping]="false"  styleClass="w-full"/> 
+            </div>
+            <div class="col-12 md:col-6 mt-3" *ngIf="schoolDetails.field.basic_details.class.active">
+              <label class="title_color">Class*</label>
+              <!-- <select id="state" (change)="checkFieldValue($event)"
+                class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary"
+                style="appearance: auto" formControlName="class">
+                <option >select</option>
+                <option *ngFor="let className of classList" >{{className.name}}</option>
+              </select> -->
+              <p-dropdown [options]="classList" formControlName="class" optionLabel="label" styleClass="w-full" />
+              <span class="text-red-500" *ngIf="class && class.invalid && class.touched">Class cannot be empty.</span>
+            </div>
+            <!-- <div class="col-12 md:col-6 mt-3" *ngIf="enableFacultyfield && schoolDetails.field.faculty">
+              <label class="title_color">Faculty*</label>
+              <select id="faculty"
+                class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary"
+                style="appearance: auto" formControlName="faculty">
+                <option >select</option>
+                <option *ngFor="let faculty of facultyList">{{faculty}}</option>
+              </select>
+              <span class="text-red-500" *ngIf="faculty && faculty.invalid && faculty.touched">Faculty cannot be empty.</span>
+            </div> -->
+             <div class="col-12 md:col-6 mt-3" *ngIf="schoolDetails.field.basic_details.section.active">
+              <label class="title_color">Section*</label>
+              <!-- <select id="faculty"
+                class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary"
+                style="appearance: auto" formControlName="section">
+                <option >select</option>
+                <option *ngFor="let section of sectionList">{{section}}</option>
+              </select> -->
+              <p-dropdown [options]="sectionList" formControlName="section" optionLabel="label" styleClass="w-full" />
+              <span class="text-red-500" *ngIf="faculty && faculty.invalid && faculty.touched">Faculty cannot be empty.</span>
+            </div>
+            <div class="col-12 md:col-6 mt-3" *ngIf="schoolDetails.field.basic_details.roll_no.active">
+              <label class="title_color">Roll number*</label>
+              <!-- <input type="text" onkeydown="return /^[0-9]/i.test(event.key)"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                formControlName="roll_no"> -->
+                <p-inputNumber  mode="decimal" class="w-full" formControlName="roll_no" inputId="withoutgrouping" [useGrouping]="false"  styleClass="w-full"/> 
+                <span class="text-red-500" *ngIf="roll_no && roll_no.invalid && roll_no.touched">Roll_no. cannot be empty.</span>
+            </div>
+            <div class="col-12 md:col-6 mt-3" *ngIf="schoolDetails.field.basic_details.admission_date.active">
+              <label class="title_color">Date of Admission*</label>
+              <!-- <input type="date" onkeydown="return /^[0-9]/i.test(event.key)"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                formControlName="admission_date"> -->
+                <p-calendar formControlName="admission_date"  styleClass="w-full"/>
+                <span class="text-red-500" *ngIf="roll_no && roll_no.invalid && roll_no.touched">Date of Admission cannot be empty.</span>
+            </div>
+            <div class="col-12 md:col-6 mt-3" *ngIf="schoolDetails.field.basic_details.dob.active">
+              <label class="title_color">Date of birth*</label>
+              <!-- <input type="date"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                formControlName="dob"> -->
+                <p-calendar formControlName="dob" class="w-full"  styleClass="w-full"/>
+                <span class="text-red-500" *ngIf="dob && dob.invalid && dob.touched">Date of birth cannot be empty.</span>
+            </div>
+            <div class="col-12 md:col-6 mt-3" *ngIf="schoolDetails.field.basic_details.gender.active">
+              <label class="title_color">Gender*</label>
+              <!-- <select id="gender"
+                class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary"
+                style="appearance: auto" formControlName="gender">
+                <option >select</option>
+                <option *ngFor="let gender of genderList">{{gender}}</option>
+              </select> -->
+              <p-dropdown [options]="genderList" formControlName="gender" optionLabel="label" styleClass="w-full" />
+              <!-- <span class="text-red-500" *ngIf="gender && gender.invalid && gender.touched">Faculty cannot be empty.</span> -->
+            </div>
+            <div class="col-12 md:col-6 mt-3" *ngIf="schoolDetails.field.basic_details.category.active">
+              <label class="title_color">Category*</label>
+              <!-- <select id="gender"
+                class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary"
+                style="appearance: auto" formControlName="category">
+                <option >select</option>
+                <option *ngFor="let category of categoryList">{{category}}</option>
+              </select> -->
+              <p-dropdown [options]="categoryList" formControlName="category" optionLabel="label" styleClass="w-full" />
+              <span class="text-red-500" *ngIf="faculty && faculty.invalid && faculty.touched">Faculty cannot be empty.</span>
+            </div>
+            <div class="col-12 md:col-6 mt-3" *ngIf="schoolDetails.field.basic_details.religion.active">
+              <label class="title_color">Religion*</label>
+              <!-- <select id="gender"
+                class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary"
+                style="appearance: auto" formControlName="category">
+                <option >select</option>
+                <option *ngFor="let category of categoryList">{{category}}</option>
+              </select> -->
+              <p-dropdown [options]="religionList" formControlName="religion" optionLabel="label" styleClass="w-full" />
+              <!-- <span class="text-red-500" *ngIf="religion && religion.invalid && religion.touched">Faculty cannot be empty.</span> -->
+            </div>
           </div>
-          <div class="field col-12 md:col-6">
-            <label>Admission number</label>
-            <input type="text"
-              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
-              formControlName="admission_no">
+
+          <div class="field col-12 p-4 border-round surface-card shadow-1 grid" formGroupName="parent_details">
+            
+            <div class="col-12 md:col-6" *ngIf="schoolDetails.field.parent_details.father_name.active">
+              <label class="title_color">Father's name*</label>
+              <!-- <input type="text" onkeydown="return /^[a-zA-Z ]*$/i.test(event.key)"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                formControlName="father_name"> -->
+                <input type="text" pInputText formControlName="father_name" class="w-full"/>
+                <span class="text-red-500" *ngIf="father_name && father_name.invalid && father_name.touched">Father Name cannot be empty.</span>
+            </div>
+            <div class="col-12 md:col-6" *ngIf="schoolDetails.field.parent_details.father_occupation.active">
+              <label class="title_color">Father Occupation*</label>
+              <!-- <input type="text" onkeydown="return /^[a-zA-Z ]*$/i.test(event.key)"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                formControlName="father_name"> -->
+                <input type="text" pInputText formControlName="father_occupation" class="w-full"/>
+                <!-- <span class="text-red-500" *ngIf="father_occupation && father_occupation.invalid && father_occupation.touched">Father Occupation cannot be empty.</span> -->
+            </div>
+            <div class="col-12 md:col-6 mt-3" *ngIf="schoolDetails.field.parent_details.father_annual_income.active">
+              <label class="title_color">Father Annual Income</label>
+              <!-- <input type="text" onkeydown="return /^[a-zA-Z ]*$/i.test(event.key)"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                formControlName="father_name"> -->
+                <p-inputNumber  mode="decimal" formControlName="father_annual_income" class="w-full" inputId="withoutgrouping" [useGrouping]="false"  styleClass="w-full"/> 
+                <!-- <span class="text-red-500" *ngIf="father_occupation && father_occupation.invalid && father_occupation.touched">Father Occupation cannot be empty.</span> -->
+            </div>
+             
+            <div class="col-12 md:col-6 mt-3" *ngIf="schoolDetails.field.parent_details.mother_name.active">
+              <label class="title_color">Mother's name*</label>
+              <!-- <input type="text" onkeydown="return /^[a-zA-Z ]*$/i.test(event.key)"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                formControlName="father_name"> -->
+                <input type="text" pInputText formControlName="mother_name" class="w-full"/>
+                <span class="text-red-500" *ngIf="mother_name && mother_name.invalid && mother_name.touched">Mother Name cannot be empty.</span>
+            </div>
+            <div class="col-12 md:col-6 mt-3" *ngIf="schoolDetails.field.parent_details.mother_occupation.active">
+              <label class="title_color">Mother Occupation*</label>
+              <!-- <input type="text" onkeydown="return /^[a-zA-Z ]*$/i.test(event.key)"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                formControlName="father_name"> -->
+                <input type="text" pInputText formControlName="mother_occupation" class="w-full"/>
+                <!-- <span class="text-red-500" *ngIf="father_occupation && father_occupation.invalid && father_occupation.touched">Father Occupation cannot be empty.</span> -->
+            </div>
+            <div class="col-12 md:col-6 mt-3" *ngIf="schoolDetails.field.parent_details.mother_annual_income.active">
+              <label class="title_color">Mother Annual Income</label>
+              <!-- <input type="text" onkeydown="return /^[a-zA-Z ]*$/i.test(event.key)"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                formControlName="father_name"> -->
+                <p-inputNumber  mode="decimal" formControlName="mother_annual_income" class="w-full" inputId="withoutgrouping" [useGrouping]="false"  styleClass="w-full"/> 
+                <!-- <span class="text-red-500" *ngIf="father_occupation && father_occupation.invalid && father_occupation.touched">Father Occupation cannot be empty.</span> -->
+            </div>
           </div>
-          <div class="field col-12 md:col-6">
-            <label>Mobile number</label>
-            <input type="text"
-              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
-              formControlName="mobile_no">
+          
+          <div class="field col-12 p-4 border-round surface-card shadow-1 grid" formGroupName="communication_details">
+            <div class="col-12 md:col-6" *ngIf="schoolDetails.field.communication_details.mobile_no.active">
+              <label class="title_color">Mobile number*</label>
+              <p-inputMask mask="9999999999" placeholder="999-999-9999" formControlName="mobile_no" styleClass="w-full"></p-inputMask>
+              <!-- <input type="text"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                formControlName="mobile_no"> -->
+                <span class="text-red-500" *ngIf="mobile_no && mobile_no.invalid && mobile_no.touched">Mobile_no. cannot be empty.</span>
+            </div>
+            <div class="col-12 md:col-6" *ngIf="schoolDetails.field.communication_details.whatsapp_no.active">
+              <label class="title_color">Whatsapp number*</label>
+              <p-inputMask mask="9999999999" placeholder="999-999-9999" formControlName="whatsapp_no" styleClass="w-full"></p-inputMask>
+              <!-- <input type="text"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                formControlName="mobile_no"> -->
+                <!-- <span class="text-red-500" *ngIf="whatsapp_no && whatsapp_no.invalid && whatsapp_no.touched">Whatsapp_no. cannot be empty.</span> -->
+            </div>
+            <div class="col-12 md:col-6 mt-3" *ngIf="schoolDetails.field.communication_details.mail_id.active">
+              <label class="title_color">E-mail ID*</label>
+              <input type="email" pInputText formControlName="mail_id" class="w-full"/>
+              <!-- <input type="text"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                formControlName="mobile_no"> -->
+                <!-- <span class="text-red-500" *ngIf="whatsapp_no && whatsapp_no.invalid && whatsapp_no.touched">Whatsapp_no. cannot be empty.</span> -->
+            </div>
+            <div class="col-12 md:col-6 mt-3" *ngIf="schoolDetails.field.communication_details.transportation.active">
+              <label class="title_color">Transportation*</label>
+              <!-- <select
+                class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary"
+                style="appearance: auto" formControlName="transportation">
+                <option>Yes</option>
+                <option>No</option>
+              </select> -->
+              <p-dropdown [options]="transportationList" formControlName="transportation" optionLabel="label" styleClass="w-full" />
+              <span class="text-red-500" *ngIf="transportation && transportation.invalid && transportation.touched">Transportation cannot be empty.</span>
+            </div>
+            <div class="col-12 mt-3" *ngIf="schoolDetails.field.communication_details.address">
+              <label class="title_color">Address*</label>
+              <!-- <textarea
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                formControlName="address"></textarea> -->
+                <textarea rows="5" cols="30" pInputTextarea formControlName="address" class="w-full"></textarea>
+                <span class="text-red-500" *ngIf="address && address.invalid && address.touched">Address cannot be empty.</span>
+            </div>
           </div>
-          <div class="field col-12 md:col-6">
-            <label>Class</label>
-            <select id="state"
-              class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary"
-              style="appearance: auto" formControlName="class">
-              <option *ngFor="let className of classList">{{className}}</option>
-            </select>
+
+          <div class="field col-12 p-4 border-round surface-card shadow-1 grid" formGroupName="other_details">
+            <div class="col-12 md:col-6" *ngIf="schoolDetails.field.other_details.aadhar_no.active">
+              <label class="title_color">Aadhar Number*</label>
+              <p-inputMask mask="999999999999" placeholder="9999-9999-9999" formControlName="aadhar_no" styleClass="w-full"></p-inputMask>
+                <!-- <span class="text-red-500" *ngIf="aadhar_no && aadhar_no.invalid && aadhar_no.touched">Aadhar No. cannot be empty.</span> -->
+            </div>
+            <div class="col-12 md:col-6" *ngIf="schoolDetails.field.other_details.blood_group.active">
+              <label class="title_color">Bloodgroup*</label>
+              <p-dropdown [options]="bloodGroupList" formControlName="blood_group" optionLabel="label" styleClass="w-full" />
+                <!-- <span class="text-red-500" *ngIf="blood_group && blood_group.invalid && blood_group.touched">Bloodgroup cannot be empty.</span> -->
+            </div>
+            <div class="col-12 md:col-6 mt-3" *ngIf="schoolDetails.field.other_details.faculty.active">
+              <label class="title_color">Faculty*</label>
+              <p-dropdown [options]="facultyList" formControlName="faculty" optionLabel="label" styleClass="w-full" />
+                <!-- <span class="text-red-500" *ngIf="blood_group && blood_group.invalid && blood_group.touched">Bloodgroup cannot be empty.</span> -->
+            </div>
+            <div class="col-12 md:col-6 mt-3" *ngIf="schoolDetails.field.other_details.admitted_in.active">
+              <label class="title_color">Admitted In*</label>
+              <p-dropdown [options]="classList" formControlName="admitted_in" optionLabel="label" styleClass="w-full" />
+                <!-- <span class="text-red-500" *ngIf="blood_group && blood_group.invalid && blood_group.touched">Bloodgroup cannot be empty.</span> -->
+            </div>
+            <div class="col-12 md:col-6 mt-3" *ngIf="schoolDetails.field.other_details.house_name.active">
+              <label class="title_color">House Name*</label>
+                <input type="text" pInputText formControlName="house_name" class="w-full"/>
+            </div>
+            <div class="col-12 md:col-6 hidden">
+              <label class="title_color">School Code*</label>
+              <input type="text" onkeydown="return /^[a-zA-Z ]*$/i.test(event.key)"  [readonly]="true"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                formControlName="school_code">
+                <span class="text-red-500" *ngIf="school_code && school_code.invalid && school_code.touched">Schhol code cannot be empty.</span>
+            </div>
+            <br >
+            <div class="col-12 md:col-6 hidden">
+              <label class="title_color">School Name*</label>
+              <input type="text" onkeydown="return /^[a-zA-Z ]*$/i.test(event.key)" [readonly]="true"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                formControlName="school_name">
+                <span class="text-red-500" *ngIf="school_name && school_name.invalid && school_name.touched">Name cannot be empty.</span>
+            </div>
           </div>
-          <div class="field col-12 md:col-6">
-            <label>Roll number</label>
-            <input type="text"
-              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
-              formControlName="roll_no">
-          </div>
-          <div class="field col-12 md:col-6">
-            <label>Date of birth</label>
-            <input type="date"
-              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
-              formControlName="dob">
-          </div>
-          <div class="field col-12 md:col-6">
-            <label>Father's name</label>
-            <input type="text"
-              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
-              formControlName="father_name">
-          </div>
-          <div class="field col-12 md:col-6">
-            <label>Mother's name</label>
-            <input type="text"
-              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
-              formControlName="mother_name">
-          </div>
-          <div class="field col-12 md:col-6">
-            <label>House Name</label>
-            <input type="text"
-              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
-              formControlName="house_name">
-          </div>
-          <div class="field col-12 md:col-6">
-            <label>Address</label>
-            <input type="text"
-              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
-              formControlName="address">
-          </div>
-          <div class="field col-12 md:col-6">
-            <label>Blood group</label>
-            <select id="state"
-              class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary"
-              style="appearance: auto" formControlName="blood_group">
-              <option *ngFor="let group of bloodGroup">{{group}}</option>
-            </select>
-          </div>
-          <div class="field col-12 md:col-6">
-            <label>Transportation</label>
-            <select
-              class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary"
-              style="appearance: auto" formControlName="transportation">
-              <option>Yes</option>
-              <option>No</option>
-            </select>
-          </div>
-          <div class="field col-12 md:col-6">
-            <label>Upload profile picture</label>
-            <input type="file" (change)="fileUpload($event)" required
-              class="file_upload text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-          </div>
-          <div class="col-12 md:col-6 " *ngIf="pictureUrl">
-            <img [src]="getPictureUrl(pictureUrl)" alt="not found" class="w-10rem h-12rem"  height="130" width="150"/>
-          </div>
+       
+
+        
+
+         
+
+
           <div 
         class="col-12 flex align-items-center justify-content-center mt-4">
-            <p-button label="Submit" type="Submit" [disabled]="!addForm.valid"></p-button>
+            <!-- <p-button label="Submit" type="Submit" [disabled]="!addForm.valid"></p-button> -->
+            <p-button label="Submit" type="Submit"></p-button>
           </div>
         </form>
       </div>
     </div>
     <div *ngIf="isPreview">
-      <app-preview [data]="data" (dataEvent)="editModeHandler()"></app-preview>
+      <app-preview [data]="data" (dataEvent)="editModeHandler()" (submitClearData)="submitClearData()" ></app-preview>
     </div>
   </div>
 </div>

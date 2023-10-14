@@ -1,0 +1,64 @@
+<div>
+<div class="col-12">
+    <p-table [value]="data"  dataKey="_id" [tableStyle]="{ 'min-width': '50rem' }" [paginator]="true" [rows]="rows" [rowsPerPageOptions]="[10, 25, 50]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" styleClass="p-datatable-sm">
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between">
+                <h2>School Master List</h2>
+            <div class="flex justify-content-end flex-wrap gap-2">
+                <button icon="pi pi-plus" pButton pRipple label="Add New School" class="p-button-info" (click)="navigateToAddSchool()"></button>
+                <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success mr-2" pTooltip="export to XLS" tooltipPosition="bottom"></button>
+            </div>
+            </div>
+            
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Logo</th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Branch</th>
+                <th>Board</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Status</th>
+                <th>Action</th>
+                <th>Appications</th>
+                <!-- <th >button</th> -->
+                <!-- <th>copy</th> -->
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-data>
+            <tr [pSelectableRow]="data">
+                <td><p-image [src]="data.logo" [preview]="true" alt="logo" width="70" class="70" /></td>
+                <td>{{ data.school_code }}</td>
+                <td>{{ data.school_name }}</td>
+                <td>{{ data.branch }}</td>
+                <td>{{ data.board }}</td>
+                <td>{{ data.phone }}</td>
+                <td>{{ data.email }}</td>
+                <td>{{data.address}}</td>
+                <td>
+                    <p-inputSwitch [ngModel]="data.status" (onChange)="changeStatus($event,data._id)"></p-inputSwitch>
+                </td>
+                <td>
+                    <div class="flex justify-content-start flex-wrap gap-2">
+                        <p-button icon="pi pi-pencil" styleClass="p-button-rounded p-button-text p-button-raised" (onClick)="onClickEdit(data._id)"  pRipple pTooltip="Edit"></p-button>
+                        <p-button label="" icon="pi pi-qrcode" (click)="downloadQRCode(data.school_code)" styleClass="p-button-secondary" pRipple pTooltip="Download QR"></p-button>
+                        <p-button [label]="" pRipple pTooltip="Copy" [icon]="(copiedData.id === data._id) && copiedData.status?'pi pi-check':'pi pi-copy'" ngxClipboard (click)="copyTextManually(data.school_code,data._id)" styleClass="p-button-secondary"></p-button>
+                    </div>
+                </td>
+                <td style="display: none;"><qrcode [qrdata]="domainName+'/?school_code='+data.school_code" [width]="150" [errorCorrectionLevel]="'M'" elementType="img" #qrcode id="qrcode" [allowEmptyString]="true"></qrcode></td>
+                <td>
+                    <p-button icon="pi pi-user" pRipple  class="p-button-warning" pTooltip="Applications" (onClick)="onClickApplications(data.school_code)"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+</div>
+
+
+<div *ngIf="isEdit" class="">
+    <app-add-school [editData]="editData" ></app-add-school>
+  </div>

@@ -1,0 +1,27 @@
+.title_color{
+    color: #09539D;
+}
+
+/* Add styling to the draggable items */
+.cdk-drag {
+    cursor: grab; /* Change cursor to grab */
+    padding: 8px; /* Add padding for visual spacing */
+    border: 1px solid #ccc; /* Add a border for a visual boundary */
+    background-color: #f0f0f0; /* Set a background color */
+    border-radius: 4px; /* Add rounded corners */
+    transition: background-color 0.2s ease; /* Smooth background color transition */
+  
+    /* Add additional styles as needed */
+  }
+  
+  /* Apply styles to the item when it's being dragged */
+  .cdk-drag-dragging {
+    opacity: 0.5; /* Reduce opacity while dragging */
+    background-color: #ddd; /* Change background color while dragging */
+  }
+  
+  /* Apply styles when an item is hovered over for drop */
+  .cdk-drop-list-dragging .cdk-drag-preview {
+    opacity: 0.5; /* Change preview opacity when item is being dragged */
+  }
+  

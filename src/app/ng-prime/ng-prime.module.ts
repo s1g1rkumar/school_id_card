@@ -15,6 +15,13 @@ import { ToastModule } from 'primeng/toast';
 import { DividerModule } from 'primeng/divider';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FileUploadModule } from 'primeng/fileupload';
+import { CardModule } from 'primeng/card';
+import { PanelModule } from 'primeng/panel';
+import { PickListModule } from 'primeng/picklist';
+import { InputSwitchModule } from 'primeng/inputswitch'
+import { ColorPickerModule } from 'primeng/colorpicker';
+import { ImageModule } from 'primeng/image';
+import { TabViewModule } from 'primeng/tabview';
 @NgModule({
   exports: [
     ButtonModule,
@@ -32,7 +39,14 @@ import { FileUploadModule } from 'primeng/fileupload';
     ToastModule,
     DividerModule,
     MultiSelectModule,
-    FileUploadModule
+    FileUploadModule,
+    CardModule,
+    PanelModule,
+    PickListModule,
+    InputSwitchModule,
+    ColorPickerModule,
+    ImageModule,
+    TabViewModule
   ]
 })
 export class NgPrimeModule { }

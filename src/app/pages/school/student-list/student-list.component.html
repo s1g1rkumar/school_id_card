@@ -1,0 +1,191 @@
+<div>
+    <div class="col-12">
+        <p-table [value]="data.data" [columns]="cols" dataKey="_id" [tableStyle]="{ 'min-width': '10rem' }" [paginator]="true" [rows]="rows" [rowsPerPageOptions]="[10, 25, 50]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" styleClass="p-datatable-sm">
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between">
+                    <h2>Student Master List</h2>
+                <div class="flex justify-content-end flex-wrap gap-2">
+                    <!-- <button icon="pi pi-plus" pButton pRipple label="Add New School" class="p-button-info" (click)="navigateToAddSchool()"></button> -->
+                    <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success mr-2" pTooltip="export to XLS" tooltipPosition="bottom"></button>
+                </div>
+                </div>
+                
+            </ng-template>
+            <!-- <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 5rem"></th>
+                    <th>Image</th>
+                    <th pSortableColumn="application_no">Appl. No.<p-sortIcon field="application_no"></p-sortIcon></th>
+                    <th pSortableColumn="basic_details.name">Name<p-sortIcon field="basic_details.name"></p-sortIcon></th>
+                    <th>Adm. Date</th>
+                    <th pSortableColumn="basic_details.admission_no">Adm. No.<p-sortIcon field="basic_details.admission_no"></p-sortIcon></th>
+                    <th pSortableColumn="basic_details.category.value">Category<p-sortIcon field="basic_details.category.value"></p-sortIcon></th>
+                    <th>Class</th>
+                    <th>Section</th>
+                    <th>Gender</th>
+                    <th>Date of Birth</th>
+                    <th>Roll No.</th>
+                    <th>Religion</th>
+                     <th>copy</th>
+            </ng-template> -->
+
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns">
+                        {{ col.header }}
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr>
+                    <td *ngFor="let col of columns">
+                        <ng-template *ngIf="isImageUrl(rowData[col.field]); else elseBlock">
+                            <!-- <p-image [src]="rowData[col.field]" [preview]="true" alt="logo" width="70" class="70" /> -->
+                            <p>{{isImageUrl(rowData[col.field]).toString()}}</p>
+                        </ng-template>
+                        <ng-template #elseBlock>
+                            {{ rowData[col.field] }}
+                        </ng-template>
+                        
+                    </td>
+                </tr>
+            </ng-template>
+
+            <!-- <ng-template pTemplate="body" let-data let-expanded="expanded">
+                <tr [pSelectableRow]="data">
+                    <td>
+                        <button type="button" pButton pRipple [pRowToggler]="data" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                    </td>
+                    <td><p-image [src]="data.logo" [preview]="true" alt="logo" width="70" class="70" /></td>
+                    <td>{{ data.application_no }}</td>
+                    <td>{{ data.basic_details.name }}</td>
+                    <td>{{ data.basic_details.admission_date | date }}</td>
+                    <td>{{ data.basic_details.admission_no }}</td>
+                    <td>{{ data.basic_details.category.value }}</td>
+                    <td>{{data.basic_details.class.value}}</td>
+                    <td>{{data.basic_details.section.value}}</td>
+                    <td>{{data.basic_details.gender.value}}</td>
+                    <td>{{data.basic_details.dob | date}}</td>
+                    <td>{{data.basic_details.roll_no}}</td>
+                    <td>{{data.basic_details.religion.value}}</td>
+                   
+                    
+                </tr>
+            </ng-template>
+
+            
+            <ng-template pTemplate="rowexpansion" let-data>
+                <tr>
+                    <td colspan="15">
+                        <div class="p-3">
+                            <p-table [value]="data.parent_details"  dataKey="_id">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>Father Name</th>
+                                        <th>Father Occupation</th>
+                                        <th>Father Annual Income</th>
+                                        <th>Mother Name</th>
+                                        <th>Mother Occupation</th>
+                                        <th>Mother Annual Income</th>
+                                        <th style="width: 4rem"></th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-details>
+                                    <tr>
+                                        <p>{{details | json}}</p>
+                                        <td>{{ details.father_name}}</td>
+                                        <td>{{details.father_occupation }}</td>
+                                        <td>{{details.father_annual_income }}</td>
+                                        <td>{{ details.mother_name}}</td>
+                                        <td>{{details.mother_occupation }}</td>
+                                        <td>{{details.mother_annual_income }}</td>
+                                        <td><p-button type="button" icon="pi pi-plus"></p-button></td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td colspan="6">There are no order for this product yet.</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="15">
+                        <div class="p-3">
+                            <p-table [value]="data.parent_details" dataKey="_id">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>Mobile No.</th>
+                                        <th>Whatsapp No.</th>
+                                        <th>E-mail ID</th>
+                                        <th>Transportation</th>
+                                        <th>Address</th>
+                                        <th style="width: 4rem"></th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-communication_details>
+                                    <tr>
+                                        <p>{{communication_details | json}}</p>
+                                        <td>{{ data.communication_details.mobile_no }}</td>
+                                        <td>{{ data.communication_details.customer }}</td>
+                                        <td>{{ data.communication_details.id }}</td>
+                                        <td>{{ data.communication_details.amount | currency: 'USD' }}</td>
+                                        <td>
+                                            dfdf
+                                        </td>
+                                        <td><p-button type="button" icon="pi pi-plus"></p-button></td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td colspan="6">There are no order for this product yet.</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="15">
+                        <div class="p-3">
+                            <p-table [value]="data.other_details" dataKey="_id">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>Aadhar No.</th>
+                                        <th>Bloodgroup</th>
+                                        <th>Faculty</th>
+                                        <th>Admitted In</th>
+                                        <th>House Name</th>
+                                        <th style="width: 4rem"></th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-order>
+                                    <tr>
+                                        <td>{{ order.id }}</td>
+                                        <td>{{ order.customer }}</td>
+                                        <td>{{ order.id }}</td>
+                                        <td>{{ order.amount | currency: 'USD' }}</td>
+                                        <td>
+                                            dfdf
+                                        </td>
+                                        <td><p-button type="button" icon="pi pi-plus"></p-button></td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td colspan="6">There are no order for this product yet.</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template> -->
+        </p-table>
+    </div>
+    </div>
+    
+    

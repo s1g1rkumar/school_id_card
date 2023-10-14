@@ -1,77 +1,161 @@
-<div class="">
+<div class="border-round surface-card shadow-1 pt-8 pl-8 pb-5">
   <h2 class="mb-4">Preview Form Data</h2>
-  <div class="grid nested-grid">
-    <div class=" col-12 md:col-8">
-      <div class="grid">
-        <div class="col-12 flex  gap-2">
-          <label>Name</label>
-          <p class="text-1xl font-bold">{{data.name}}</p>
-        </div>
-        <div class="col-12 flex  gap-2">
-          <label>Roll number</label>
-          <p class="text-1xl font-bold">{{data.roll_number}}</p>
-        </div>
-        <div class="col-12 flex  gap-2">
-          <label>Admission Number</label>
-          <p class="text-1xl font-bold">{{ data.admission_number}}</p>
-        </div>
-        <div class="col-12 flex  gap-2">
-          <label>Mobile number</label>
-          <p class="text-1xl font-bold">{{data.mobile_number}}</p>
+  <div id="printForm" >
+    <div class="grid nested-grid">
+      <div class=" col-12 md:col-6">
+        <div class="grid" name="basic_details">
+          <div class="col-12 flex  gap-2">
+            <label class="title_color font-bold">Name</label>
+            <p class="text-xl font-bold">{{data.basic_details.name}}</p>
+          </div>
+          <div class="col-12 flex  gap-2">
+            <label class="title_color font-bold">Admission Number</label>
+            <p class="text-xl font-bold">{{ data.basic_details.admission_no}}</p>
+          </div>
+          <div class="col-12 flex  gap-2">
+            <label class="title_color font-bold">Class</label>
+            <p class="text-xl font-bold">{{data.basic_details.class.value}}</p>
+          </div>
+          <div class="col-12 flex  gap-2">
+            <label class="title_color font-bold">Section</label>
+            <p class="text-xl font-bold">{{data.basic_details.section.value}}</p>
+          </div>
+          <div class="col-12 flex  gap-2">
+            <label class="title_color font-bold">Roll number</label>
+            <p class="text-xl font-bold">{{data.basic_details.roll_no}}</p>
+          </div>
+          <div class="col-12 flex  gap-2">
+            <label class="title_color font-bold">Admission Date</label>
+            <p class="text-xl font-bold">{{data.basic_details.admission_date | date}}</p>
+          </div>
+          <div class="col-12 flex  gap-2">
+            <label class="title_color font-bold">Date of Birth</label>
+            <p class="text-xl font-bold">{{data.basic_details.dob | date}}</p>
+          </div>
+          <div class="col-12 flex  gap-2">
+            <label class="title_color font-bold">Gender</label>
+            <p class="text-xl font-bold">{{data.basic_details.gender.value }}</p>
+          </div>
+          <div class="col-12 flex  gap-2">
+            <label class="title_color font-bold">Category</label>
+            <p class="text-xl font-bold">{{data.basic_details.category.value }}</p>
+          </div>
+          <div class="col-12 flex  gap-2">
+            <label class="title_color font-bold">Religion</label>
+            <p class="text-xl font-bold">{{data.basic_details.religion.value }}</p>
+          </div>
+          
+          
+          
+          <!-- <div class="col-12 flex  gap-2">
+            <label class="title_color">School Code</label>
+            <p class="text-xl font-bold">{{data.school_code}}</p>
+          </div> -->
+          <!-- <div class="col-12 flex  gap-2">
+            <label class="title_color font-bold">School Name</label>
+            <p class="text-xl font-bold">{{data.school_name}}</p>
+          </div> -->
+        </div>     
+      </div>
+      <div class="col-12 md:col-6">
+        <img [src]="getPictureUrl(data.basic_details.picture)" height="170" width="150"/>
+      </div>
+
+      <div class="col-12 md:col-6">
+        <div class="grid"  name=" parent_details">
+          <div class="col-12 flex gap-2">
+            <label class="title_color font-bold">Father Name</label>
+            <p class="text-xl font-bold">{{data.parent_details.father_name}}</p>
+          </div>
+          <div class="col-12 flex gap-2">
+            <label class="title_color font-bold">Mother Name</label>
+            <p class="text-xl font-bold">{{data.parent_details.mother_name}}</p>
+          </div>
+          <div class="col-12 flex gap-2">
+            <label class="title_color font-bold">Father Occupation</label>
+            <p class="text-xl font-bold">{{data.parent_details.father_occupation}}</p>
+          </div>
+          <div class="col-12 flex gap-2">
+            <label class="title_color font-bold">Mother Occupation</label>
+            <p class="text-xl font-bold">{{data.parent_details.mother_occupation}}</p>
+          </div>
+          <div class="col-12 flex gap-2">
+            <label class="title_color font-bold">Father Annual Income</label>
+            <p class="text-xl font-bold">{{data.parent_details.father_annual_income}}</p>
+          </div>
+          <div class="col-12 flex gap-2">
+            <label class="title_color font-bold">Mother Annual Income</label>
+            <p class="text-xl font-bold">{{data.parent_details.mother_annual_income}}</p>
+          </div>
         </div>
       </div>
+     
+      <div class="col-12 md:col-6">
+        <div class="grid" name="communication_details">
+          <div class="col-12 flex gap-2">
+            <label class="title_color font-bold">Mobile Number</label>
+            <p class="text-xl font-bold">{{data.communication_details.mobile_no}}</p>
+          </div>
+          <div class="col-12 flex gap-2">
+            <label class="title_color font-bold">Whatsapp Name</label>
+            <p class="text-xl font-bold">{{data.communication_details.whatsapp_no}}</p>
+          </div>
+          <div class="col-12 flex gap-2">
+            <label class="title_color font-bold">Email ID</label>
+            <p class="text-xl font-bold">{{data.communication_details.mail_id}}</p>
+          </div>
+          <div class="col-12 flex gap-2">
+            <label class="title_color font-bold">Transportation</label>
+            <p class="text-xl font-bold">{{data.communication_details.transportation.value}}</p>
+          </div>
+          <div class="col-12 flex gap-2">
+            <label class="title_color font-bold">Address</label>
+            <p class="text-xl font-bold">{{data.communication_details.address}}</p>
+          </div>
+        </div>
+      </div>
+     
+      <div class="col-12 md:col-6">
+        <div class="grid" name="other_details">
+          <div class="col-12 flex gap-2">
+            <label class="title_color font-bold">Aadhar Number</label>
+            <p class="text-xl font-bold">{{data.other_details.aadhar_no}}</p>
+          </div>
+          <div class="col-12 flex gap-2">
+            <label class="title_color font-bold">Bloodgroup</label>
+            <p class="text-xl font-bold">{{data.other_details.blood_group.value}}</p>
+          </div>
+          <div class="col-12 flex gap-2">
+            <label class="title_color font-bold">Faculty</label>
+            <p class="text-xl font-bold">{{data.other_details.faculty.value}}</p>
+          </div>
+          <div class="col-12 flex gap-2">
+            <label class="title_color font-bold">Admitted In</label>
+            <p class="text-xl font-bold">{{data.other_details.admitted_in.value}}</p>
+          </div>
+          <div class="col-12 flex gap-2">
+            <label class="title_color font-bold">House Name</label>
+            <p class="text-xl font-bold">{{data.other_details.house_name}}</p>
+          </div>
+          <div class="col-12 flex gap-2">
+            <label class="title_color font-bold">School Name</label>
+            <p class="text-xl font-bold">{{data.other_details.school_name}}</p>
+          </div>
+        </div>
+      </div>
+      
+  
     </div>
-    <div class="col-12 md:col-4">
-      <img [src]="getPictureUrl(data.picture)" alt="not found" class="w-10rem h-12rem">
-    </div>
-    <div class="col-12 md:col-6">
-      <label>Class</label>
-      <p class="text-1xl font-bold">{{data.class}}</p>
-    </div>
-    <div class="col-12 md:col-6">
-      <label>Roll number</label>
-      <p class="text-1xl font-bold">{{data.roll_number}}</p>
-    </div>
-    <div class="col-12 md:col-6">
-      <label>Roll number</label>
-      <p class="text-1xl font-bold">{{data.roll_number}}</p>
-    </div>
-    <div class="col-12 md:col-6">
-      <label>Date of birth</label>
-      <p class="text-1xl font-bold">{{data.dob | date}}</p>
-    </div>
-    <div class="col-12 md:col-6">
-      <label>Father's name</label>
-      <p class="text-1xl font-bold">{{data.father_name}}</p>
-    </div>
-    <div class="col-12 md:col-6">
-      <label>Mother's name</label>
-      <p class="text-1xl font-bold">{{data.mother_name}}</p>
-    </div>
-    <div class="col-12 md:col-6">
-      <label>House name</label>
-      <p class="text-1xl font-bold">{{data.house_name}}</p>
-    </div>
-    <div class="col-12 md:col-6">
-      <label>Address</label>
-      <p class="text-1xl font-bold">{{data.address}}</p>
-    </div>
-    <div class="col-12 md:col-6">
-      <label>Blood group</label>
-      <p class="text-1xl font-bold">{{data.blood_group}}</p>
-    </div>
-    <div class="col-12 md:col-6">
-      <label>Transportation</label>
-      <p class="text-1xl font-bold">{{data.transportation}}</p>
-    </div>
-
-
-    <div class="col-12 md:col-6">
+  </div>
+ <div>
+  <div class="grid nested-grid">
+    <div class="col-6 flex align-items-start justify-content-evenly  border border-200 border-solid">
       <p-button label="Edit" (click)="onClickEditModeHandler()" >
       </p-button>
       <p-button label="Submit"  (click)="onClickSubmit()">
       </p-button>
     </div>
   </div>
+ </div>
 
 </div>
